@@ -218,7 +218,16 @@ function useHistoryStateNavigation(base: string) {
     replace: boolean
   ): void {
     let token = window.location.hash
-    token = token.split('##')?.[0]
+    let splitted_token = token.split('##')
+    token = splitted_token[0]
+    let tail = (splitted_token[1] || '') !== '/' ? splitted_token[1] : ''
+    // Trim extra slashes at the beginning of the tail
+    if (tail) {
+      while (tail[0] === '/') {
+        tail = tail.substr(1)
+      }
+    }
+
     /**
      * if a base tag is provided, and we are on a normal domain, we have to
      * respect the provided `base` attribute because pushState() will use it and
@@ -233,8 +242,11 @@ function useHistoryStateNavigation(base: string) {
       hashIndex > -1
         ? (location.host && document.querySelector('base')
             ? token + base
-            : token + base.slice(hashIndex)) + to
-        : createBaseLocation() + token + base + to
+            : token + base.slice(hashIndex)) +
+          to +
+          (tail || '')
+        : createBaseLocation() + token + base + to + (tail || '')
+
     console.warn('changeLocation', {
       url,
       hashIndex,
@@ -243,6 +255,8 @@ function useHistoryStateNavigation(base: string) {
       to,
       hash: window.location.hash,
       token,
+      splitted_token,
+      tail,
     })
     try {
       // BROWSER QUIRK
