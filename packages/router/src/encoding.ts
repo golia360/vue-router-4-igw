@@ -18,7 +18,7 @@ import { warn } from './warning'
 // const EXTRA_RESERVED_RE = /[!'()*]/g
 // const encodeReservedReplacer = (c: string) => '%' + c.charCodeAt(0).toString(16)
 
-const HASH_RE = /#/g // %23
+const HASH_RE = /##/g // %23
 const AMPERSAND_RE = /&/g // %26
 const SLASH_RE = /\//g // %2F
 const EQUAL_RE = /=/g // %3D

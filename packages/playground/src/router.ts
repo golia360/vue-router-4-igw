@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouterView } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory, RouterView } from 'vue-router'
 import Home from './views/Home.vue'
 import Nested from './views/Nested.vue'
 import NestedWithId from './views/NestedWithId.vue'
@@ -17,7 +17,7 @@ import { scrollWaiter } from './scrollWaiter'
 import RepeatedParams from './views/RepeatedParams.vue'
 let removeRoute: (() => void) | undefined
 
-export const routerHistory = createWebHistory()
+export const routerHistory = createWebHashHistory("/##")
 export const router = createRouter({
   history: routerHistory,
   strict: true,

@@ -79,7 +79,7 @@ export function scrollToPosition(position: ScrollPosition): void {
   if ('el' in position) {
     const positionEl = position.el
     const isIdSelector =
-      typeof positionEl === 'string' && positionEl.startsWith('#')
+      typeof positionEl === 'string' && positionEl.startsWith('##')
     /**
      * `id`s can accept pretty much any characters, including CSS combinators
      * like `>` or `~`. It's still possible to retrieve elements using

@@ -248,6 +248,8 @@ export function createRouterMatcher(
     let path: MatcherLocation['path']
     let name: MatcherLocation['name']
 
+    console.log('location index.ts', location, currentLocation)
+
     if ('name' in location && location.name) {
       matcher = matcherMap.get(location.name)
 

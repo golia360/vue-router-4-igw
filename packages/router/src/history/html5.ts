@@ -41,7 +41,7 @@ function createCurrentLocation(
 ): HistoryLocation {
   const { pathname, search, hash } = location
   // allows hash bases like #, /#, #/, #!, #!/, /#!/, or even /folder#end
-  const hashPos = base.indexOf('#')
+  const hashPos = base.indexOf('##')
   if (hashPos > -1) {
     let slicePos = hash.includes(base.slice(hashPos))
       ? base.slice(hashPos).length
@@ -49,10 +49,18 @@ function createCurrentLocation(
     let pathFromHash = hash.slice(slicePos)
     // prepend the starting slash to hash so the url starts with /#
     if (pathFromHash[0] !== '/') pathFromHash = '/' + pathFromHash
-    return stripBase(pathFromHash, '')
+    // console.warn('createCurrentLocation', {
+    //   base,
+    //   location,
+    //   slicePos,
+    //   pathFromHash,
+    //   hash,
+    //   stripped: stripBase(pathFromHash, ''),
+    // })
+    return '' //stripBase(pathFromHash, '')
   }
   const path = stripBase(pathname, base)
-  return path + search + hash
+  return path + search //+ hash
 }
 
 function useHistoryListeners(
@@ -209,6 +217,8 @@ function useHistoryStateNavigation(base: string) {
     state: StateEntry,
     replace: boolean
   ): void {
+    let token = window.location.hash
+    token = token.split('##')?.[0]
     /**
      * if a base tag is provided, and we are on a normal domain, we have to
      * respect the provided `base` attribute because pushState() will use it and
@@ -218,13 +228,22 @@ function useHistoryStateNavigation(base: string) {
      * there is no host, the `<base>` tag makes no sense and if there isn't a
      * base tag we can just use everything after the `#`.
      */
-    const hashIndex = base.indexOf('#')
+    const hashIndex = base.indexOf('##')
     const url =
       hashIndex > -1
         ? (location.host && document.querySelector('base')
-            ? base
-            : base.slice(hashIndex)) + to
-        : createBaseLocation() + base + to
+            ? token + base
+            : token + base.slice(hashIndex)) + to
+        : createBaseLocation() + token + base + to
+    console.warn('changeLocation', {
+      url,
+      hashIndex,
+      base,
+      createBaseLocation: createBaseLocation(),
+      to,
+      hash: window.location.hash,
+      token,
+    })
     try {
       // BROWSER QUIRK
       // NOTE: Safari throws a SecurityError when calling this function 100 times in 30 seconds
@@ -313,6 +332,7 @@ function useHistoryStateNavigation(base: string) {
  */
 export function createWebHistory(base?: string): RouterHistory {
   base = normalizeBase(base)
+  console.log('Base normalizzata: ' + base)
 
   const historyNavigation = useHistoryStateNavigation(base)
   const historyListeners = useHistoryListeners(
@@ -326,6 +346,10 @@ export function createWebHistory(base?: string): RouterHistory {
     history.go(delta)
   }
 
+  console.log('History: ', {
+    historyNavigation,
+    historyListeners,
+  })
   const routerHistory: RouterHistory = assign(
     {
       // it's overridden right after

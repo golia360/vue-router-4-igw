@@ -32,13 +32,13 @@ export function createWebHashHistory(base?: string): RouterHistory {
   // location.pathname contains an initial `/` even at the root: `https://example.com`
   base = location.host ? base || location.pathname + location.search : ''
   // allow the user to provide a `#` in the middle: `/base/#/app`
-  if (!base.includes('#')) base += '#'
+  if (!base.includes('##')) base += '##'
 
-  if (__DEV__ && !base.endsWith('#/') && !base.endsWith('#')) {
+  if (__DEV__ && !base.endsWith('#/') && !base.endsWith('##')) {
     warn(
       `A hash base must end with a "#":\n"${base}" should be "${base.replace(
         /#.*$/,
-        '#'
+        '##'
       )}".`
     )
   }

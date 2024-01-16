@@ -52,10 +52,9 @@ export function parseURL(
     query: LocationQuery = {},
     searchString = '',
     hash = ''
-
   // Could use URL and URLSearchParams but IE 11 doesn't support it
   // TODO: move to new URL()
-  const hashPos = location.indexOf('#')
+  const hashPos = location.indexOf('##')
   let searchPos = location.indexOf('?')
   // the hash appears before the search, so it's not part of the search string
   if (hashPos < searchPos && hashPos >= 0) {
@@ -81,6 +80,14 @@ export function parseURL(
   // no search and no query
   path = resolveRelativePath(path != null ? path : location, currentLocation)
   // empty path means a relative query or hash `?foo=f`, `#thing`
+
+  //   console.log('AAAA', {
+  //     location,
+  //     currentLocation,
+  //     path,
+  //     fullPath: path + (searchString && '?') + searchString + hash,
+  //     hash: decode(hash),
+  //   })
 
   return {
     fullPath: path + (searchString && '?') + searchString + hash,

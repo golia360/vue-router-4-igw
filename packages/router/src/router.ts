@@ -498,7 +498,7 @@ export function createRouter(options: RouterOptions): Router {
     const matchedRoute = matcher.resolve(matcherLocation, currentLocation)
     const hash = rawLocation.hash || ''
 
-    if (__DEV__ && hash && !hash.startsWith('#')) {
+    if (__DEV__ && hash && !hash.startsWith('##')) {
       warn(
         `A \`hash\` should always start with the character "#". Replace "${hash}" with "#${hash}".`
       )
@@ -595,7 +595,7 @@ export function createRouter(options: RouterOptions): Router {
 
       if (typeof newTargetLocation === 'string') {
         newTargetLocation =
-          newTargetLocation.includes('?') || newTargetLocation.includes('#')
+          newTargetLocation.includes('?') || newTargetLocation.includes('##')
             ? (newTargetLocation = locationAsObject(newTargetLocation))
             : // force empty params
               { path: newTargetLocation }
